@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "company-spec-task-check",
+      "description": "Company default (managed by kiro-ai-baseline). After each spec task, the agent verifies tests, guardrails, and traceability before reporting done.",
+      "trigger": "PostTaskExecution",
+      "action": {
+        "type": "agent",
+        "prompt": "A spec task just finished. Before you report it done, briefly confirm: (1) tests were added or updated for the changed behavior and you ran them; (2) no secrets, PII, or guardrail violations were introduced; (3) the task checkbox in tasks.md is updated and still references its requirement IDs. Fix anything that fails before continuing."
+      }
+    }
+  ]
+}

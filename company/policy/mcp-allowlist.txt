@@ -1,0 +1,8 @@
+# Approved MCP servers (name or URL host). Team repos adding servers not on this list get a CI warning.
+github
+atlassian
+slack
+microsoft365
+api.githubcopilot.com
+mcp.atlassian.com
+mcp.slack.com

@@ -1,0 +1,14 @@
+# Company guardrail: shell commands the agent may NOT run (PreToolUse hook blocks them).
+# Format: <name><TAB><flags: i=case-insensitive, -=sensitive><TAB><regex>
+# Regex must work in both POSIX ERE (grep -E) and .NET: no \d \s \b or lookarounds.
+# Owner: AI Enablement + Security. Changes require CODEOWNERS review.
+rm-root-or-home	-	rm +-[a-zA-Z]*[rR][a-zA-Z]* +(/|~/?|\$HOME/?|/\*)( |"|$)
+git-force-push	-	git +push( +[^ ]+)* +(--force|-f)( |"|$)
+pipe-remote-script-to-shell	-	(curl|wget)[^|]*\| *(sudo +)?(ba|z)?sh( |"|$)
+terraform-apply-or-destroy	-	terraform +(apply|destroy)( |"|$)
+kubectl-delete	-	kubectl +([^ ]+ +)*delete( |"|$)
+sql-drop-or-truncate	i	(drop +(database|schema|table)|truncate +table)
+recursive-chmod-777	-	chmod +-R +777
+disk-wipe	-	(mkfs\.|dd +if=[^ ]+ +of=/dev/)
+read-credential-files	-	(cat|less|more|head|tail|type|Get-Content) +[^ ]*(\.aws/credentials|\.ssh/id_|\.env( |"|$)|\.pem( |"|$))
+dump-environment	-	(^|[ ";&|])(printenv|env|Get-ChildItem +env:)("|$)

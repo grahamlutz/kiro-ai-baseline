@@ -1,0 +1,7 @@
+{
+  "name": "python",
+  "version": "0.1.0",
+  "description": "Python services, libraries, and scripts: style, typing, packaging, pytest, and ruff-on-save.",
+  "owner": "@acme/python-guild",
+  "requires": ["ruff"]
+}

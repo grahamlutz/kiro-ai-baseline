@@ -1,0 +1,13 @@
+{
+    "mcpServers": {
+        "internal-tool": {
+            "url": "https://tools.example.com/mcp",
+            "headers": {
+                "Authorization": "Bearer not-an-env-ref-123"
+            },
+            "autoApprove": [
+                "*"
+            ]
+        }
+    }
+}

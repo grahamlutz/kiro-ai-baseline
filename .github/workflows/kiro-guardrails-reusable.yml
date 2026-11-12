@@ -1,0 +1,55 @@
+# Reusable workflow called from every team repo (see templates/team/.github/workflows/kiro-guardrails.yml).
+# Validates the team's .kiro/ config and AGENTS.md against company guardrails.
+name: kiro-guardrails-reusable
+
+on:
+  workflow_call:
+    inputs:
+      baseline-ref:
+        description: "Tag or branch of kiro-ai-baseline to lint against (e.g. v1)"
+        type: string
+        default: v0
+      baseline-repo:
+        description: "owner/name of the baseline repo"
+        type: string
+        default: acme/kiro-ai-baseline   # TODO(ai-enablement): set to your org's repo
+    secrets:
+      KIRO_BASELINE_APP_ID:
+        required: false
+      KIRO_BASELINE_APP_PRIVATE_KEY:
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      HAS_APP: ${{ secrets.KIRO_BASELINE_APP_ID != '' }}
+    steps:
+      - name: Check out team repo
+        uses: actions/checkout@v4
+
+      # Private baseline repo: a GitHub App with contents:read on it gives every
+      # team repo read access without personal tokens. See docs/admin-setup.md.
+      - name: Mint baseline read token
+        id: app
+        if: env.HAS_APP == 'true'
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.KIRO_BASELINE_APP_ID }}
+          private-key: ${{ secrets.KIRO_BASELINE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Check out kiro-ai-baseline
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.baseline-repo }}
+          ref: ${{ inputs.baseline-ref }}
+          path: .kiro-baseline
+          token: ${{ steps.app.outputs.token || github.token }}
+
+      - name: Lint .kiro/ against company guardrails
+        run: python3 .kiro-baseline/tools/kiro_lint.py team --repo . --baseline .kiro-baseline

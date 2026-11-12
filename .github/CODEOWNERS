@@ -1,0 +1,9 @@
+# TODO(ai-enablement): replace @acme/* with your GitHub teams.
+*                                        @acme/ai-enablement
+/company/steering/company-guardrails-*   @acme/ai-enablement @acme/security
+/company/policy/                         @acme/ai-enablement @acme/security
+/company/settings/                       @acme/ai-enablement @acme/security
+/company/hooks/                          @acme/ai-enablement @acme/security
+/company/scripts/                        @acme/ai-enablement @acme/security
+/config/org.json                         @acme/ai-enablement @acme/security
+/packs/python/                           @acme/python-guild @acme/ai-enablement

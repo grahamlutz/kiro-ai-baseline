@@ -1,0 +1,51 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint company layer, packs, and templates
+        run: python3 tools/kiro_lint.py central
+      - name: ShellCheck
+        run: shellcheck -S warning setup.sh company/scripts/*.sh
+      - name: Validate JSON
+        run: |
+          find . -name '*.json' -not -path './.git/*' -print0 | xargs -0 -n1 python3 -m json.tool > /dev/null
+
+  test-unix:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            bash: bash
+          - os: macos-latest
+            bash: /bin/bash        # macOS stock bash 3.2, which is what most engineers have
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unit + integration tests
+        env:
+          BASH_BIN: ${{ matrix.bash }}
+        run: python3 -m unittest discover -s tests -v
+
+  test-windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shell: [powershell, pwsh]   # Windows PowerShell 5.1 and PowerShell 7
+    steps:
+      - uses: actions/checkout@v4
+      - name: Smoke test setup.ps1
+        shell: ${{ matrix.shell }}
+        run: ./tests/smoke.ps1

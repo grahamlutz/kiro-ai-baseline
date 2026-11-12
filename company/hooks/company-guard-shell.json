@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "company-guard-shell",
+      "description": "Company guardrail (managed by kiro-ai-baseline). Blocks destructive or credential-leaking shell commands listed in ~/.kiro/company/policy/blocked-commands.tsv.",
+      "trigger": "PreToolUse",
+      "matcher": "shell",
+      "timeout": 10,
+      "action": {
+        "type": "command",
+        "command": "{{RUN:guard-shell}}"
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+# Managed by kiro-ai-baseline scaffold. Checks this repo's .kiro/ config against company guardrails.
+name: kiro-guardrails
+
+on:
+  pull_request:
+    paths:
+      - ".kiro/**"
+      - "AGENTS.md"
+      - "**/AGENTS.md"
+      - ".github/workflows/kiro-guardrails.yml"
+  workflow_dispatch:
+
+jobs:
+  kiro-guardrails:
+    uses: {{BASELINE_REPO}}/.github/workflows/kiro-guardrails-reusable.yml@{{BASELINE_REF}}
+    with:
+      baseline-ref: {{BASELINE_REF}}
+      baseline-repo: {{BASELINE_REPO}}
+    secrets: inherit

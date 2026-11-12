@@ -1,0 +1,7 @@
+{
+  "name": "<stack-name>",
+  "version": "0.1.0",
+  "description": "<One line: what stacks and repo types this pack is for.>",
+  "owner": "@acme/<owning-team>",
+  "requires": []
+}

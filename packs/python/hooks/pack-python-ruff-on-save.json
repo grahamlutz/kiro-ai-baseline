@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "pack-python-ruff-on-save",
+      "description": "Pack: python. Runs ruff on each Python file the agent saves and feeds lint errors back to the agent. Requires ruff on PATH.",
+      "trigger": "PostFileSave",
+      "matcher": "\\.py$",
+      "timeout": 30,
+      "action": {
+        "type": "command",
+        "command": "ruff check --output-format concise \"{{filePath}}\""
+      }
+    }
+  ]
+}

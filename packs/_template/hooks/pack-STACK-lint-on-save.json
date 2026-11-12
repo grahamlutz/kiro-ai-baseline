@@ -1,0 +1,17 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "pack-STACK-lint-on-save",
+      "description": "Pack: <stack-name>. Runs <linter> on each saved file.",
+      "trigger": "PostFileSave",
+      "matcher": "\\.<ext>$",
+      "timeout": 30,
+      "enabled": false,
+      "action": {
+        "type": "command",
+        "command": "<linter> \"{{filePath}}\""
+      }
+    }
+  ]
+}

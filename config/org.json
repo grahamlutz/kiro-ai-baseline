@@ -1,0 +1,18 @@
+{
+  "orgName": "Acme",
+  "baselineRepo": "acme/kiro-ai-baseline",
+  "aiEnablementTeam": "@acme/ai-enablement",
+  "securityTeam": "@acme/security",
+  "connectors": {
+    "slack": {
+      "enabled": false,
+      "clientId": "",
+      "redirectPort": "7778"
+    },
+    "microsoft365": {
+      "enabled": false,
+      "tenantId": "",
+      "clientId": ""
+    }
+  }
+}

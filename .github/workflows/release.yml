@@ -1,0 +1,30 @@
+# Push a semver tag (git tag v1.4.0 && git push --tags) to publish a release.
+# Moves the floating major tag (v1) that team repos' CI pins to.
+name: release
+
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check VERSION matches tag
+        run: |
+          test "v$(tr -d '[:space:]' < VERSION)" = "${GITHUB_REF_NAME}" || { echo "VERSION file does not match tag ${GITHUB_REF_NAME}"; exit 1; }
+      - name: Move major tag
+        run: |
+          major="${GITHUB_REF_NAME%%.*}"
+          git tag -f "$major" "$GITHUB_SHA"
+          git push -f origin "refs/tags/$major"
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" --generate-notes --verify-tag
